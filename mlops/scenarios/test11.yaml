@@ -1,0 +1,13 @@
+name: test11
+display_name: '11'
+description: Scenario profile for 11.
+backbone_type: custom_code
+dataset: fall_detection
+base_model: ''
+classes: []
+postproc: ''
+weights: ''
+hyperparams: {}
+backbone_config:
+  cells: []
+  datasets: []

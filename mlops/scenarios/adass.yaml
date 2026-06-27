@@ -1,0 +1,13 @@
+name: adass
+display_name: adass
+description: Scenario profile for adass.
+backbone_type: custom_code
+dataset: ''
+base_model: ''
+classes: []
+postproc: ''
+weights: ''
+hyperparams: {}
+backbone_config:
+  cells: []
+  datasets: []

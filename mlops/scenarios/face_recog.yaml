@@ -1,0 +1,16 @@
+name: face_recog
+display_name: face_recog
+description: Scenario profile for face_recog.
+backbone_type: face_recognition
+dataset: FaceRecognition
+base_model: ''
+classes: []
+postproc: ''
+weights: mlops/models/face_recog/v2/gallery.db
+hyperparams:
+  guard_profile: balanced
+backbone_config:
+  # [incremental] Set to true to copy the latest gallery.db and only ingest
+  # images whose source paths are not already tracked. Set to false (or remove)
+  # to rebuild the gallery from scratch on every train run.
+  incremental: true

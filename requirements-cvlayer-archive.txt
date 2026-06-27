@@ -1,0 +1,5 @@
+pymupdf
+rapidfuzz
+transformers
+easyocr
+openai-whisper

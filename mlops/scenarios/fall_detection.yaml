@@ -1,0 +1,14 @@
+name: fall_detection
+display_name: Fall Detection
+description: Detects person falls using a YOLO model trained on the fall_dataset (374
+  train / 111 val).
+base_model: Base_Cv_program/yolo11n.pt
+dataset: fall_detection
+classes:
+- tiger
+postproc: mlops.pipeline.postproc.fall_detection:run
+weights: mlops/models/fall_detection/v1/weights.pt
+hyperparams:
+  epochs: 20
+  imgsz: 640
+  guard_profile: balanced

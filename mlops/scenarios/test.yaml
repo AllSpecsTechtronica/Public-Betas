@@ -1,0 +1,26 @@
+name: test
+display_name: test cnn
+description: Scenario profile for test cnn.
+backbone_type: torch_tabular
+dataset: ''
+base_model: ''
+classes: []
+postproc: ''
+weights: ''
+hyperparams:
+  guard_profile: fast
+backbone_config:
+  dataset_csv: mlops/datasets/car_price_prediction_.csv
+  cells:
+  - path: basic_cnn_for_editing.py
+  label_col: Price
+  feature_cols:
+  - Car ID
+  - Brand
+  - Year
+  - Engine Size
+  - Fuel Type
+  - Transmission
+  - Mileage
+  - Condition
+  - Model

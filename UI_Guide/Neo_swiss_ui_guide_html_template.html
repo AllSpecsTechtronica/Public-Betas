@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="ViewPort" content="width=device-width, initial-scale=1.0">
+<title>Neo-Swiss / Colorway Sandbox</title>
+<style>
+:root {
+  /* Filled in dynamically by JS — these are placeholders */
+  --ns-pure-void: #050608;
+  --ns-void: #0A0B0D;
+  --ns-graphite-1: #131518;
+  --ns-graphite-2: #1A1D21;
+  --ns-graphite-3: #23272D;
+  --ns-graphite-4: #2E333A;
+  --ns-graphite-5: #3F4651;
+  --ns-mist-1: #5A6370;
+  --ns-mist-2: #7C8593;
+  --ns-mist-3: #A4ACB8;
+  --ns-bone: #D8DCE2;
+  --ns-paper: #ECEEF2;
+  --ns-vermillion: #E63E2B;
+  --ns-amber: #E8A317;
+  --ns-cyan: #2BC4D9;
+  --ns-radiation: #5BE872;
+  --ns-oak: #3A2E22;
+  --ns-clay: #8C5A3C;
+  --ns-botanical: #4A8C3F;
+
+  --ns-font-sans: "Inter", "Söhne", -apple-system, "Segoe UI", system-ui, sans-serif;
+  --ns-font-mono: "JetBrains Mono", "Berkeley Mono", "IBM Plex Mono", "SF Mono", Menlo, monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--ns-pure-void);
+  color: var(--ns-bone);
+  font-family: var(--ns-font-sans);
+  font-size: 13px;
+  line-height: 1.5;
+  font-feature-settings: "tnum";
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 180ms linear, color 180ms linear;
+}
+
+.sb-shell {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px 32px 64px;
+}
+
+/* =====================================================
+   MASTHEAD
+===================================================== */
+.sb-masthead {
+  border-top: 2px solid var(--ns-bone);
+  border-bottom: 0.5px solid var(--ns-graphite-4);
+  padding: 16px 0 24px;
+  margin-bottom: 32px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 32px;
+  align-items: end;
+}
+.sb-title {
+  font-size: 32px;
+  font-weight: 500;
+  color: var(--ns-paper);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.sb-subtitle {
+  font-size: 12px;
+  color: var(--ns-mist-2);
+  margin-top: 8px;
+}
+.sb-meta {
+  font-family: var(--ns-font-mono);
+  font-size: 10px;
+  color: var(--ns-mist-1);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-align: right;
+}
+.sb-meta__active {
+  color: var(--ns-paper);
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* =====================================================
+   COLORWAY SWITCHER
+===================================================== */
+.sb-switcher {
+  display: flex;
+  gap: 0;
+  border: 0.5px solid var(--ns-graphite-4);
+  margin-bottom: 24px;
+  background: var(--ns-graphite-1);
+}
+.sb-switcher__btn {
+  flex: 1;
+  background: transparent;
+  border: 0;
+  border-right: 0.5px solid var(--ns-graphite-4);
+  color: var(--ns-mist-2);
+  padding: 12px 16px;
+  font-family: var(--ns-font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  transition: background-color 120ms linear, color 120ms linear;
+}
+.sb-switcher__btn:last-child { border-right: 0; }
+.sb-switcher__btn:hover {
+  background: var(--ns-graphite-2);
+  color: var(--ns-bone);
+}
+.sb-switcher__btn.is-active {
+  background: var(--ns-graphite-3);
+  color: var(--ns-paper);
+}
+.sb-switcher__btn .lbl {
+  font-size: 13px;
+  font-family: var(--ns-font-sans);
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 500;
+}
+.sb-switcher__btn .desc {
+  font-size: 9px;
+  color: var(--ns-mist-1);
+}
+.sb-switcher__btn.is-active .desc {
+  color: var(--ns-mist-2);
+}
+
+/* =====================================================
+   LAYOUT
+===================================================== */
+.sb-layout {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 0;
+  border: 0.5px solid var(--ns-graphite-4);
+}
+.sb-tokens {
+  background: var(--ns-graphite-1);
+  border-right: 0.5px solid var(--ns-graphite-4);
+  padding: 20px;
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+}
+.sb-stage {
+  background: var(--ns-pure-void);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* =====================================================
+   TOKEN EDITOR
+===================================================== */
+.sb-tokens__group {
+  margin-bottom: 24px;
+}
+.sb-tokens__group-title {
+  font-family: var(--ns-font-mono);
+  font-size: 10px;
+  color: var(--ns-mist-1);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding-bottom: 8px;
+  border-bottom: 0.5px solid var(--ns-graphite-3);
+  margin-bottom: 8px;
+}
+.sb-token {
+  display: grid;
+  grid-template-columns: 24px 1fr 88px 28px;
+  gap: 8px;
+  align-items: center;
+  padding: 4px 0;
+  font-size: 11px;
+}
+.sb-token__swatch {
+  width: 24px;
+  height: 16px;
+  border: 0.5px solid var(--ns-graphite-5);
+}
+.sb-token__name {
+  font-family: var(--ns-font-mono);
+  font-size: 10px;
+  color: var(--ns-mist-2);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.sb-token__hex {
+  font-family: var(--ns-font-mono);
+  font-size: 11px;
+  color: var(--ns-bone);
+  background: transparent;
+  border: 0.5px solid var(--ns-graphite-4);
+  padding: 2px 4px;
+  width: 100%;
+  text-align: center;
+}
+.sb-token__hex:focus {
+  outline: 0;
+  border-color: var(--ns-cyan);
+  color: var(--ns-paper);
+}
+.sb-token__pick {
+  width: 28px;
+  height: 22px;
+  border: 0.5px solid var(--ns-graphite-4);
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+}
+.sb-token__pick::-webkit-color-swatch-wrapper { padding: 0; }
+.sb-token__pick::-webkit-color-swatch { border: 0; }
+
+/* =====================================================
+   STAGE — components rendered with active colorway
+===================================================== */
+.sb-stage__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 0.5px solid var(--ns-graphite-4);
+  padding-bottom: 12px;
+}
+.sb-stage__title {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ns-paper);
+}
+.sb-stage__sub {
+  font-family: var(--ns-font-mono);
+  font-size: 10px;
+  color: var(--ns-mist-1);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.sb-stage__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.sb-stage__row--three {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.sb-panel {
+  background: var(--ns-graphite-1);
+  border: 0.5px solid var(--ns-graphite-4);
+  padding: 12px;
+}
+.sb-panel__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 8px;
+  border-bottom: 0.5px solid var(--ns-graphite-3);
+  margin-bottom: 8px;
+}
+.sb-panel__title {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ns-paper);
+}
+.sb-panel__id {
+  font-family: var(--ns-font-mono);
+  font-size: 10px;
+  color: var(--ns-mist-1);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* Entity row */
+.sb-entity {
+  display: grid;
+  grid-template-columns: 12px 1fr auto auto;
+  gap: 8px;
+  align-items: center;
+  padding: 4px 0;
+  border-bottom: 0.5px solid var(--ns-graphite-3);
+  font-size: 11px;
+}
+.sb-entity:last-child { border-bottom: 0; }
+.sb-entity__dot {
+  width: 8px;
+  height: 8px;
+  background: var(--ns-mist-1);
+}
+.sb-entity__dot--alive  { background: var(--ns-radiation); }
+.sb-entity__dot--alert  { background: var(--ns-vermillion); }
+.sb-entity__dot--attn   { background: var(--ns-amber); }
+.sb-entity__dot--proc   { background: var(--ns-cyan); }
+.sb-entity__dot--idle   { background: var(--ns-graphite-5); }
+.sb-entity__name {
+  color: var(--ns-paper);
+  font-weight: 500;
+}
+.sb-entity__id {
+  font-family: var(--ns-font-mono);
+  font-size: 10px;
+  color: var(--ns-mist-1);
+}
+.sb-entity__metric {
+  font-family: var(--ns-font-mono);
+  font-size: 10px;
+  color: var(--ns-bone);
+}
+
+/* Badges */
+.sb-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.sb-badge {
+  font-family: var(--ns-font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 2px 6px;
+  border: 0.5px solid currentColor;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.sb-badge--alive  { color: var(--ns-radiation); }
+.sb-badge--alert  { color: var(--ns-vermillion); }
+.sb-badge--attn   { color: var(--ns-amber); }
+.sb-badge--proc   { color: var(--ns-cyan); }
+.sb-badge--idle   { color: var(--ns-mist-1); }
+
+/* Tagged callouts */
+.sb-tcallout {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--ns-font-mono);
+  font-size: 10px;
+  color: var(--ns-mist-2);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.sb-tcallout::before {
+  content: "";
+  width: 6px; height: 6px;
+  border: 1px solid var(--ns-mist-1);
+  display: inline-block;
+}
+.sb-tcallout--proc::before  { background: var(--ns-cyan); border-color: var(--ns-cyan); }
+.sb-tcallout--alert::before { background: var(--ns-vermillion); border-color: var(--ns-vermillion); }
+.sb-tcallout--alive::before { background: var(--ns-radiation); border-color: var(--ns-radiation); }
+
+.sb-dim {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--ns-font-mono);
+  font-size: 10px;
+  color: var(--ns-mist-2);
+  letter-spacing: 0.04em;
+  border: 0.5px solid var(--ns-graphite-5);
+  padding: 1px 4px;
+}
+
+/* Filled data tag — vermillion rectangle with paper text inside.
+   Used as the primary data-container pattern in Beacon (AR HUD register).
+   In dark colorways this becomes a saturated vermillion accent block;
+   in Beacon it is the colorway's identity gesture. */
+.sb-datatag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--ns-font-mono);
+  font-size: 10px;
+  color: var(--ns-paper);
+  background: var(--ns-vermillion);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  font-weight: 500;
+}
+.sb-datatag--lg {
+  font-size: 11px;
+  padding: 4px 10px;
+}
+.sb-datatag--alert  { background: var(--ns-vermillion); }
+.sb-datatag--attn   { background: var(--ns-amber); }
+.sb-datatag--proc   { background: var(--ns-cyan); }
+.sb-datatag--alive  { background: var(--ns-radiation); }
+.sb-datatag--idle   { background: var(--ns-graphite-5); color: var(--ns-mist-3); }
+
+/* Metric block */
+.sb-metric {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.sb-metric__label {
+  font-family: var(--ns-font-mono);
+  font-size: 9px;
+  color: var(--ns-mist-1);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.sb-metric__value {
+  font-family: var(--ns-font-mono);
+  font-size: 18px;
+  color: var(--ns-paper);
+  letter-spacing: -0.01em;
+}
+.sb-metric__delta {
+  font-family: var(--ns-font-mono);
+  font-size: 10px;
+  color: var(--ns-mist-2);
+}
+.sb-metric--good .sb-metric__value { color: var(--ns-radiation); }
+.sb-metric--good .sb-metric__delta { color: var(--ns-radiation); }
+.sb-metric--warn .sb-metric__value { color: var(--ns-amber); }
+.sb-metric--warn .sb-metric__delta { color: var(--ns-amber); }
+.sb-metric--alert .sb-metric__value { color: var(--ns-vermillion); }
+
+.sb-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border: 0.5px solid var(--ns-graphite-4);
+}
+.sb-metrics-grid > div {
+  padding: 12px;
+  border-right: 0.5px solid var(--ns-graphite-4);
+}
+.sb-metrics-grid > div:last-child { border-right: 0; }
+
+/* Cell stream */
+.sb-cellstream {
+  background: var(--ns-pure-void);
+  border: 0.5px solid var(--ns-graphite-4);
+  padding: 10px 12px;
+  font-family: var(--ns-font-mono);
+  font-size: 10px;
+  line-height: 1.7;
+  color: var(--ns-mist-3);
+  max-height: 180px;
+  overflow: hidden;
+}
+.sb-cs-line {
+  display: grid;
+  grid-template-columns: 76px 1fr;
+  gap: 8px;
+}
+.sb-cs__t { color: var(--ns-mist-1); }
+.sb-cs__m--info  { color: var(--ns-mist-3); }
+.sb-cs__m--ok    { color: var(--ns-radiation); }
+.sb-cs__m--warn  { color: var(--ns-amber); }
+.sb-cs__m--err   { color: var(--ns-vermillion); }
+.sb-cs__m--cyan  { color: var(--ns-cyan); }
+
+/* Sparklines */
+.sb-sparkgrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+.sb-spark {
+  background: var(--ns-pure-void);
+  border: 0.5px solid var(--ns-graphite-4);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.sb-spark__lbl {
+  font-family: var(--ns-font-mono);
+  font-size: 9px;
+  color: var(--ns-mist-1);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.sb-spark__val {
+  font-family: var(--ns-font-mono);
+  font-size: 11px;
+  color: var(--ns-paper);
+}
+
+/* Contrast pairings strip */
+.sb-contrast {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0;
+  border: 0.5px solid var(--ns-graphite-4);
+}
+.sb-contrast__cell {
+  padding: 16px 12px;
+  font-family: var(--ns-font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-right: 0.5px solid var(--ns-graphite-4);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.sb-contrast__cell:last-child { border-right: 0; }
+.sb-contrast__cell .lbl {
+  color: currentColor;
+  opacity: 0.5;
+  font-size: 9px;
+}
+.sb-contrast__cell .smp { font-size: 12px; }
+
+/* Chips */
+.sb-chips {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+.sb-chip {
+  border: 0.5px solid var(--ns-graphite-4);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: var(--ns-graphite-1);
+}
+.sb-chip__sw {
+  height: 36px;
+  border: 0.5px solid var(--ns-graphite-5);
+}
+.sb-chip__nm {
+  font-family: var(--ns-font-mono);
+  font-size: 9px;
+  color: var(--ns-mist-2);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.sb-chip__hx {
+  font-family: var(--ns-font-mono);
+  font-size: 10px;
+  color: var(--ns-bone);
+}
+
+/* Pulse strip */
+.sb-pulse {
+  background: var(--ns-graphite-1);
+  border: 0.5px solid var(--ns-graphite-4);
+  padding: 6px 12px;
+  font-family: var(--ns-font-mono);
+  font-size: 10px;
+  color: var(--ns-mist-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Footer */
+.sb-footer {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 0.5px solid var(--ns-graphite-4);
+  font-family: var(--ns-font-mono);
+  font-size: 9px;
+  color: var(--ns-mist-1);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 24px;
+}
+
+button { font-family: inherit; }
+
+/* Action button — for the export */
+.sb-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+.sb-act {
+  background: transparent;
+  border: 0.5px solid var(--ns-graphite-5);
+  color: var(--ns-mist-3);
+  padding: 6px 10px;
+  font-family: var(--ns-font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+}
+.sb-act:hover {
+  border-color: var(--ns-cyan);
+  color: var(--ns-paper);
+}
+
+/* =====================================================
+   BEACON COLORWAY — colorway-conditional overrides
+   =====================================================
+   Beacon's design rule: every title renders as a vermillion
+   data-tag rectangle with paper text inside. This is the
+   AR HUD register where titles are themselves data containers,
+   not just typography. The transformation applies to:
+     - Masthead title (largest tag)
+     - Stage section heads (mid-size tags)
+     - Panel titles (small tags)
+   These rules only apply when body[data-colorway="beacon"]. */
+
+[data-colorway="beacon"] .sb-title {
+  display: inline-block;
+  background: var(--ns-vermillion);
+  color: var(--ns-paper);
+  font-family: var(--ns-font-mono);
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 10px 18px;
+  line-height: 1;
+}
+
+[data-colorway="beacon"] .sb-stage__title {
+  display: inline-block;
+  background: var(--ns-vermillion);
+  color: var(--ns-paper);
+  font-family: var(--ns-font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+}
+
+[data-colorway="beacon"] .sb-panel__title {
+  display: inline-block;
+  background: var(--ns-vermillion);
+  color: var(--ns-paper);
+  font-family: var(--ns-font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+}
+
+/* Section heads need their bottom-rule treatment adjusted —
+   the underline rule looks weird below a tag-style title. */
+[data-colorway="beacon"] .sb-stage__head {
+  border-bottom-color: var(--ns-graphite-4);
+  align-items: center;
+}
+
+/* Panel head — same logic, the rail under a tag title needs
+   the tag to feel deliberately placed rather than collide
+   with the rule. */
+[data-colorway="beacon"] .sb-panel__head {
+  align-items: center;
+}
+
+/* AUXILIARY / CONTEXT TEXT — golden yellow.
+   Beacon's auxiliary text uses --ns-amber (which is overridden
+   to the high-visibility golden #FFD235 in this colorway). This
+   gives Beacon a two-color typographic system at a glance: red
+   tag-titles and golden auxiliary, far enough apart on the
+   chromatic wheel to read as distinct categories.
+   Auxiliary/context candidates — the elements that DESCRIBE or
+   CONTEXTUALIZE primary content rather than carry it: */
+
+/* Masthead subtitle — describes the page */
+[data-colorway="beacon"] .sb-subtitle {
+  color: var(--ns-amber);
+}
+
+/* Section subs — the / STATE SEMANTICS labels next to section heads */
+[data-colorway="beacon"] .sb-stage__sub {
+  color: var(--ns-amber);
+}
+
+/* Panel IDs — the /REG.01 identifiers in panel rails */
+[data-colorway="beacon"] .sb-panel__id {
+  color: var(--ns-amber);
+}
+
+/* Switcher button descriptions — the descriptive subtext under each
+   colorway button. Auxiliary content in the navigation surface. */
+[data-colorway="beacon"] .sb-switcher__btn .desc {
+  color: var(--ns-amber);
+}
+
+/* Meta labels — SANDBOX / SB-001 etc. in masthead right column.
+   These are also auxiliary context. */
+[data-colorway="beacon"] .sb-meta {
+  color: var(--ns-amber);
+}
+[data-colorway="beacon"] .sb-meta__active {
+  color: var(--ns-amber);
+}
+
+/* Footer text */
+[data-colorway="beacon"] .sb-footer {
+  color: var(--ns-amber);
+}
+
+</style>
+</head>
+<body>
+
+<div class="sb-shell">
+
+<header class="sb-masthead">
+  <div>
+    <h1 class="sb-title">Colorway sandbox</h1>
+    <p class="sb-subtitle">Neo-Swiss component grammar rendered against switchable palettes. Edit any token live.</p>
+  </div>
+  <div class="sb-meta">
+    <span>SANDBOX / SB-001</span>
+    <div class="sb-meta__active" id="active-name">DEFAULT</div>
+  </div>
+</header>
+
+<!-- Switcher -->
+<div class="sb-switcher" id="switcher"></div>
+
+<div class="sb-layout">
+  <!-- ========== TOKEN EDITOR ========== -->
+  <aside class="sb-tokens">
+    <div class="sb-tokens__group">
+      <div class="sb-tokens__group-title">Substrate</div>
+      <div id="tokens-substrate"></div>
+    </div>
+    <div class="sb-tokens__group">
+      <div class="sb-tokens__group-title">Surgical accents</div>
+      <div id="tokens-accents"></div>
+    </div>
+    <div class="sb-tokens__group">
+      <div class="sb-tokens__group-title">Eco-brutalist warmth</div>
+      <div id="tokens-warmth"></div>
+    </div>
+    <div class="sb-actions">
+      <button class="sb-act" id="export-btn">Export hex</button>
+      <button class="sb-act" id="reset-btn">Reset</button>
+    </div>
+  </aside>
+
+  <!-- ========== STAGE ========== -->
+  <main class="sb-stage">
+
+    <!-- Surgical accent chips -->
+    <div>
+      <div class="sb-stage__head">
+        <span class="sb-stage__title">Surgical accents</span>
+        <span class="sb-stage__sub">/ STATE SEMANTICS</span>
+      </div>
+    </div>
+    <div class="sb-chips">
+      <div class="sb-chip">
+        <div class="sb-chip__sw" style="background: var(--ns-vermillion);"></div>
+        <span class="sb-chip__nm">VERMILLION / ALERT</span>
+        <span class="sb-chip__hx" data-display-of="--ns-vermillion">#E63E2B</span>
+      </div>
+      <div class="sb-chip">
+        <div class="sb-chip__sw" style="background: var(--ns-amber);"></div>
+        <span class="sb-chip__nm">AMBER / ATTN</span>
+        <span class="sb-chip__hx" data-display-of="--ns-amber">#E8A317</span>
+      </div>
+      <div class="sb-chip">
+        <div class="sb-chip__sw" style="background: var(--ns-cyan);"></div>
+        <span class="sb-chip__nm">CYAN / PROC</span>
+        <span class="sb-chip__hx" data-display-of="--ns-cyan">#2BC4D9</span>
+      </div>
+      <div class="sb-chip">
+        <div class="sb-chip__sw" style="background: var(--ns-radiation);"></div>
+        <span class="sb-chip__nm">RADIATION / ALIVE</span>
+        <span class="sb-chip__hx" data-display-of="--ns-radiation">#5BE872</span>
+      </div>
+    </div>
+
+    <!-- Contrast strip -->
+    <div>
+      <div class="sb-stage__head">
+        <span class="sb-stage__title">Contrast pairings</span>
+        <span class="sb-stage__sub">/ LEGIBILITY CHECK</span>
+      </div>
+    </div>
+    <div class="sb-contrast">
+      <div class="sb-contrast__cell" style="background: var(--ns-pure-void); color: var(--ns-paper);">
+        <span class="lbl">PAPER / VOID</span>
+        <span class="smp">Aa 0.847</span>
+      </div>
+      <div class="sb-contrast__cell" style="background: var(--ns-graphite-1); color: var(--ns-bone);">
+        <span class="lbl">BONE / GRAPHITE-1</span>
+        <span class="smp">Aa 0.847</span>
+      </div>
+      <div class="sb-contrast__cell" style="background: var(--ns-graphite-1); color: var(--ns-mist-3);">
+        <span class="lbl">MIST-3 / GRAPHITE-1</span>
+        <span class="smp">Aa body</span>
+      </div>
+      <div class="sb-contrast__cell" style="background: var(--ns-graphite-1); color: var(--ns-mist-1);">
+        <span class="lbl">MIST-1 / GRAPHITE-1</span>
+        <span class="smp">Aa anno</span>
+      </div>
+      <div class="sb-contrast__cell" style="background: var(--ns-pure-void); color: var(--ns-radiation);">
+        <span class="lbl">RAD / VOID</span>
+        <span class="smp">+0.034</span>
+      </div>
+      <div class="sb-contrast__cell" style="background: var(--ns-pure-void); color: var(--ns-vermillion);">
+        <span class="lbl">VERM / VOID</span>
+        <span class="smp">FAILED</span>
+      </div>
+    </div>
+
+    <!-- Two panel row: registry + cell stream -->
+    <div class="sb-stage__row">
+      <div class="sb-panel">
+        <div class="sb-panel__head">
+          <span class="sb-panel__title">Scenario registry</span>
+          <span class="sb-panel__id">/REG.01</span>
+        </div>
+        <div class="sb-entity">
+          <div class="sb-entity__dot sb-entity__dot--alive"></div>
+          <span class="sb-entity__name">fall_detection</span>
+          <span class="sb-entity__id">v3</span>
+          <span class="sb-entity__metric">mAP 0.847</span>
+        </div>
+        <div class="sb-entity">
+          <div class="sb-entity__dot sb-entity__dot--proc"></div>
+          <span class="sb-entity__name">semiconductors</span>
+          <span class="sb-entity__id">v8</span>
+          <span class="sb-entity__metric">38%</span>
+        </div>
+        <div class="sb-entity">
+          <div class="sb-entity__dot sb-entity__dot--attn"></div>
+          <span class="sb-entity__name">InjuryDetection</span>
+          <span class="sb-entity__id">v2</span>
+          <span class="sb-entity__metric">drift 0.31</span>
+        </div>
+        <div class="sb-entity">
+          <div class="sb-entity__dot sb-entity__dot--alert"></div>
+          <span class="sb-entity__name">audio_recognition</span>
+          <span class="sb-entity__id">v1</span>
+          <span class="sb-entity__metric">eval failed</span>
+        </div>
+        <div class="sb-entity">
+          <div class="sb-entity__dot sb-entity__dot--idle"></div>
+          <span class="sb-entity__name">face_recog</span>
+          <span class="sb-entity__id">gallery</span>
+          <span class="sb-entity__metric">idle</span>
+        </div>
+      </div>
+
+      <div class="sb-panel">
+        <div class="sb-panel__head">
+          <span class="sb-panel__title">Cell stream / train</span>
+          <span class="sb-panel__id">/CS.01</span>
+        </div>
+        <div class="sb-cellstream">
+          <div class="sb-cs-line"><span class="sb-cs__t">14:22:08</span><span class="sb-cs__m--info">dataset hash 7f4a92b1c8 verified</span></div>
+          <div class="sb-cs-line"><span class="sb-cs__t">14:22:08</span><span class="sb-cs__m--cyan">cell.train_001 imgsz=640 epochs=20</span></div>
+          <div class="sb-cs-line"><span class="sb-cs__t">14:22:09</span><span class="sb-cs__m--info">epoch 01/20 loss 4.821</span></div>
+          <div class="sb-cs-line"><span class="sb-cs__t">14:22:22</span><span class="sb-cs__m--info">epoch 02/20 loss 3.217</span></div>
+          <div class="sb-cs-line"><span class="sb-cs__t">14:22:34</span><span class="sb-cs__m--ok">epoch 03/20 loss 2.108 best</span></div>
+          <div class="sb-cs-line"><span class="sb-cs__t">14:22:46</span><span class="sb-cs__m--warn">guard :: epoch ceiling exceeded</span></div>
+          <div class="sb-cs-line"><span class="sb-cs__t">14:22:58</span><span class="sb-cs__m--info">epoch 04/20 loss 1.643</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Metrics + tags row -->
+    <div class="sb-stage__row">
+      <div>
+        <div class="sb-metrics-grid">
+          <div>
+            <div class="sb-metric sb-metric--good">
+              <span class="sb-metric__label">mAP @ 50</span>
+              <span class="sb-metric__value">0.847</span>
+              <span class="sb-metric__delta">+0.034 vs v2</span>
+            </div>
+          </div>
+          <div>
+            <div class="sb-metric">
+              <span class="sb-metric__label">FRAMES</span>
+              <span class="sb-metric__value">4,217</span>
+              <span class="sb-metric__delta">+612</span>
+            </div>
+          </div>
+          <div>
+            <div class="sb-metric sb-metric--warn">
+              <span class="sb-metric__label">DRIFT 24H</span>
+              <span class="sb-metric__value">0.31</span>
+              <span class="sb-metric__delta">attention</span>
+            </div>
+          </div>
+          <div>
+            <div class="sb-metric">
+              <span class="sb-metric__label">P99 / MS</span>
+              <span class="sb-metric__value">42.1</span>
+              <span class="sb-metric__delta">+8.2</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sb-panel">
+        <div class="sb-panel__head">
+          <span class="sb-panel__title">Tags &amp; badges</span>
+          <span class="sb-panel__id">/TAG.01</span>
+        </div>
+        <div class="sb-badges" style="margin-bottom: 10px;">
+          <span class="sb-badge sb-badge--alive">ALIVE</span>
+          <span class="sb-badge sb-badge--proc">RUNNING</span>
+          <span class="sb-badge sb-badge--attn">DEGRADED</span>
+          <span class="sb-badge sb-badge--alert">FAILED</span>
+          <span class="sb-badge sb-badge--idle">IDLE</span>
+        </div>
+        <div class="sb-badges" style="margin-bottom: 10px;">
+          <span class="sb-tcallout">SCN.FALL.V3</span>
+          <span class="sb-tcallout sb-tcallout--proc">JOB.RUNNING</span>
+          <span class="sb-tcallout sb-tcallout--alert">DRIFT.0.84</span>
+          <span class="sb-tcallout sb-tcallout--alive">VERIFIED</span>
+          <span class="sb-dim">SHA:7F4A92</span>
+          <span class="sb-dim">640PX</span>
+        </div>
+        <!-- Filled data tags — Beacon's defining pattern.
+             Vermillion rectangles with paper text inside.
+             In dark colorways these read as saturated accent blocks;
+             in Beacon they are the colorway's identity gesture. -->
+        <div class="sb-badges">
+          <span class="sb-datatag sb-datatag--alert sb-datatag--lg">SCN.FALL.V3</span>
+          <span class="sb-datatag sb-datatag--alert">mAP 0.847</span>
+          <span class="sb-datatag sb-datatag--proc">RUNNING 38%</span>
+          <span class="sb-datatag sb-datatag--attn">DRIFT 0.31</span>
+          <span class="sb-datatag sb-datatag--alive">VERIFIED</span>
+          <span class="sb-datatag sb-datatag--idle">IDLE</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sparkline grid -->
+    <div>
+      <div class="sb-stage__head">
+        <span class="sb-stage__title">Small multiples</span>
+        <span class="sb-stage__sub">/ SPARKLINE GRAMMAR</span>
+      </div>
+    </div>
+    <div class="sb-sparkgrid">
+      <div class="sb-spark">
+        <span class="sb-spark__lbl">LOSS</span>
+        <svg viewBox="0 0 80 24" style="width:100%;height:24px;">
+          <polyline points="0,22 10,18 20,15 30,11 40,8 50,6 60,5 70,4 80,3"
+            fill="none" stroke="var(--ns-mist-3)" stroke-width="1"/>
+        </svg>
+        <span class="sb-spark__val">1.402</span>
+      </div>
+      <div class="sb-spark">
+        <span class="sb-spark__lbl">mAP</span>
+        <svg viewBox="0 0 80 24" style="width:100%;height:24px;">
+          <polyline points="0,20 10,17 20,13 30,10 40,8 50,6 60,5 70,4 80,3"
+            fill="none" stroke="var(--ns-radiation)" stroke-width="1"/>
+        </svg>
+        <span class="sb-spark__val">0.847</span>
+      </div>
+      <div class="sb-spark">
+        <span class="sb-spark__lbl">P99 LATENCY</span>
+        <svg viewBox="0 0 80 24" style="width:100%;height:24px;">
+          <polyline points="0,18 10,15 20,16 30,12 40,14 50,10 60,11 70,8 80,6"
+            fill="none" stroke="var(--ns-amber)" stroke-width="1"/>
+        </svg>
+        <span class="sb-spark__val">42.1ms</span>
+      </div>
+      <div class="sb-spark">
+        <span class="sb-spark__lbl">DRIFT</span>
+        <svg viewBox="0 0 80 24" style="width:100%;height:24px;">
+          <polyline points="0,20 10,19 20,17 30,14 40,12 50,10 60,8 70,6 80,4"
+            fill="none" stroke="var(--ns-amber)" stroke-width="1"/>
+        </svg>
+        <span class="sb-spark__val">0.31</span>
+      </div>
+      <div class="sb-spark">
+        <span class="sb-spark__lbl">QUEUE</span>
+        <svg viewBox="0 0 80 24" style="width:100%;height:24px;">
+          <polyline points="0,16 10,18 20,14 30,12 40,16 50,14 60,18 70,12 80,15"
+            fill="none" stroke="var(--ns-cyan)" stroke-width="1"/>
+        </svg>
+        <span class="sb-spark__val">2 jobs</span>
+      </div>
+      <div class="sb-spark">
+        <span class="sb-spark__lbl">COST / HR</span>
+        <svg viewBox="0 0 80 24" style="width:100%;height:24px;">
+          <polyline points="0,16 10,15 20,15 30,14 40,12 50,12 60,11 70,10 80,9"
+            fill="none" stroke="var(--ns-mist-3)" stroke-width="1"/>
+        </svg>
+        <span class="sb-spark__val">$0.42</span>
+      </div>
+    </div>
+
+    <!-- Pulse -->
+    <div class="sb-pulse">
+      14:22:58 / scn.fall.v3 :: epoch 04/20 / 14:22:46 / guard :: epoch ceiling / 14:22:34 / scn.fall.v3 :: epoch 03 best / 14:22:09 / scn.semi.v8 :: epoch 12/30 / 14:21:55 / scn.injury :: drift attention
+    </div>
+
+  </main>
+</div>
+
+<footer class="sb-footer">
+  <span>NEO-SWISS / SANDBOX SB-001 / REV 0.1.0</span>
+  <span id="footer-cw">DEFAULT</span>
+  <span>2026-05-04</span>
+</footer>
+
+</div>
+
+<script>
+// =====================================================
+// COLORWAYS — named palettes
+// =====================================================
+const COLORWAYS = {
+  default: {
+    name: "Default",
+    desc: "Neo-Swiss baseline",
+    tokens: {
+      "--ns-pure-void":   "#050608",
+      "--ns-void":        "#0A0B0D",
+      "--ns-graphite-1":  "#131518",
+      "--ns-graphite-2":  "#1A1D21",
+      "--ns-graphite-3":  "#23272D",
+      "--ns-graphite-4":  "#2E333A",
+      "--ns-graphite-5":  "#3F4651",
+      "--ns-mist-1":      "#5A6370",
+      "--ns-mist-2":      "#7C8593",
+      "--ns-mist-3":      "#A4ACB8",
+      "--ns-bone":        "#D8DCE2",
+      "--ns-paper":       "#ECEEF2",
+      "--ns-vermillion":  "#E63E2B",
+      "--ns-amber":       "#E8A317",
+      "--ns-cyan":        "#2BC4D9",
+      "--ns-radiation":   "#5BE872",
+      "--ns-oak":         "#3A2E22",
+      "--ns-clay":        "#8C5A3C",
+      "--ns-botanical":   "#4A8C3F"
+    }
+  },
+  aurora: {
+    name: "Aurora",
+    desc: "Foggy redwood — cool green-greys, sage mist",
+    tokens: {
+      // Substrate has a green-grey bias, not blue. The deep void carries
+      // a faint green-cool cast like canopy shadow. Mid-tones lift toward
+      // sage-grey — fog reading through redwood canopy. Highlights are
+      // cool but not blue-cool; they're the pale luminous quality of fog
+      // light filtering down to the forest floor.
+      "--ns-pure-void":   "#050807",
+      "--ns-void":        "#0A0E0C",
+      "--ns-graphite-1":  "#121815",
+      "--ns-graphite-2":  "#18201C",
+      "--ns-graphite-3":  "#222A26",
+      "--ns-graphite-4":  "#2D3833",
+      "--ns-graphite-5":  "#3F4C46",
+      "--ns-mist-1":      "#5A6862",   // sage-grey, fog-shadow
+      "--ns-mist-2":      "#7E8C84",   // fog-light at mid-distance
+      "--ns-mist-3":      "#A8B4AC",   // brighter fog, near-foreground
+      "--ns-bone":        "#D6DDD8",   // luminous fog-white with green tint
+      "--ns-paper":       "#E8EDE9",
+      // Accents respect the forest-floor logic: rare saturated notes
+      // against a desaturated atmospheric ground.
+      // Vermillion warms more than blue-Aurora — against green substrate
+      // it pushes toward chanterelle / madrone berry to retain alert salience.
+      // Amber stays close to default; mushroom-cap / lichen-yellow.
+      // Cyan becomes fog-filtered light — desaturated cool teal.
+      // Radiation becomes fresh moss — electric but biased toward spring growth
+      // rather than CRT phosphor.
+      "--ns-vermillion":  "#E8543A",
+      "--ns-amber":       "#E0A828",
+      "--ns-cyan":        "#6EC4C0",
+      "--ns-radiation":   "#7AE860",
+      // Eco-brutalist warmth comes into its own here.
+      // Oak shifts to wet-redwood trunk: cool-leaning brown with russet undertone.
+      // Clay shifts to weathered madrone bark — muted earth.
+      // Botanical cools to harmonize with the green-tinted substrate;
+      // it now reads as deep moss rather than tropical foliage.
+      "--ns-oak":         "#2E251E",
+      "--ns-clay":        "#7A5A48",
+      "--ns-botanical":   "#3F7A52"
+    }
+  },
+  ember: {
+    name: "Ember",
+    desc: "Vermillion text — terminal register, amber alerts",
+    tokens: {
+      // Substrate stays default Neo-Swiss — cool, neutral, instrumentation
+      // grey. The colorway character is concentrated entirely in
+      // vermillion-as-primary-text. Operationally compatible with Default
+      // for spatial relationships; only the chromatic identity changes.
+      "--ns-pure-void":   "#050608",
+      "--ns-void":        "#0A0B0D",
+      "--ns-graphite-1":  "#131518",
+      "--ns-graphite-2":  "#1A1D21",
+      "--ns-graphite-3":  "#23272D",
+      "--ns-graphite-4":  "#2E333A",
+      "--ns-graphite-5":  "#3F4651",
+      "--ns-mist-1":      "#5A6370",
+      "--ns-mist-2":      "#7C8593",
+      "--ns-mist-3":      "#A4ACB8",
+      // BONE and PAPER are overridden to the vermillion HUE.
+      // This is the central architectural move of Ember: every component
+      // that uses bone or paper as its text color automatically gets
+      // the vermillion hue as a result. Title text uses paper-as-vermillion;
+      // emphasized body text uses bone-as-vermillion-darker. The two-
+      // step ramp preserves typographic hierarchy (titles brighter
+      // than body) while making every word the operator reads
+      // chromatically identifiable as Ember.
+      // Heritage: DOS-era amber monochromes, military HUD red-text-for-
+      // night-vision, vintage Bloomberg orange-on-black terminals.
+      "--ns-bone":        "#D43E18",
+      "--ns-paper":       "#FF4A1F",
+      // SEMANTIC ACCENT REASSIGNMENT in Ember:
+      // The token names preserve their semantic ROLES (vermillion=alert,
+      // amber=attention, cyan=process, radiation=alive) but the underlying
+      // hue values shift up the urgency hierarchy because vermillion-the-
+      // hue is now occupying the text-color slot.
+      //
+      // Vermillion-the-token (semantic ALERT) → resolves to a warm
+      //   yellow-amber tone, NOT the literal vermillion hue. This way,
+      //   alert states (FAILED entities, alert badges, vermillion-coded
+      //   tagged callouts) render in a hot warning color that's
+      //   distinguishable from the vermillion text body.
+      "--ns-vermillion":  "#FFB020",
+      // Amber-the-token (semantic ATTENTION) → moves to a cooler,
+      //   slightly more golden tone. Maintains warmth-family but
+      //   distinct from alert-amber above.
+      "--ns-amber":       "#E8A317",
+      "--ns-cyan":        "#2BC4D9",
+      "--ns-radiation":   "#5BE872",
+      // Eco-brutalist warmth stays default.
+      "--ns-oak":         "#3A2E22",
+      "--ns-clay":        "#8C5A3C",
+      "--ns-botanical":   "#4A8C3F"
+    }
+  },
+  beacon: {
+    name: "Beacon",
+    desc: "AR HUD — vermillion data containers on light substrate",
+    tokens: {
+      // INVERTED LUMINANCE COLORWAY.
+      //
+      // This is the only Neo-Swiss colorway with a light substrate.
+      // Architecturally it operates differently from the dark colorways:
+      //   - substrate is light (mist-3 cool grey)
+      //   - data containers (rectangles, badges, callouts) are saturated
+      //     vermillion blocks
+      //   - text INSIDE vermillion blocks is paper (light)
+      //   - text OUTSIDE vermillion blocks (on substrate) is dark
+      //
+      // This is the AR HUD register: data containers are self-luminous
+      // chromatic blocks that float legibly against any background.
+      // The vermillion-with-paper-text pattern is how aircraft HUDs and
+      // augmented reality interfaces handle data overlay against
+      // unpredictable backgrounds.
+      //
+      // Token semantics get reassigned for this colorway:
+      //   - pure-void / void / graphite-1..2 = DARKEST values, used for
+      //     primary text on the light substrate. The "dark text" register.
+      //   - graphite-3..5 = mid-darks, used for hairlines and structural
+      //     borders (darker than substrate so they show against mist-3).
+      //   - mist-1..3 = the substrate ramp itself. Mist-3 is the page
+      //     background; mist-2 is panel surfaces (slightly darker so
+      //     panels show against substrate); mist-1 is raised/emphasis.
+      //   - bone / paper = text-on-vermillion. These are the colors that
+      //     render INSIDE saturated data containers.
+      //   - vermillion (token) = data-container background, the IDENTITY
+      //     color of this colorway. Used as fill, not just as accent.
+
+      // The "darkest" end of the ramp is now the dark text register.
+      // These render as primary text on the light substrate.
+      "--ns-pure-void":   "#0A0E14",
+      "--ns-void":        "#161B23",
+      "--ns-graphite-1":  "#222933",
+      "--ns-graphite-2":  "#2E3640",
+      // Mid-darks: hairlines and structural rules. Must be visibly darker
+      // than the mist-3 substrate so panel borders and entity-row dividers
+      // remain legible.
+      "--ns-graphite-3":  "#3F4651",
+      "--ns-graphite-4":  "#5A6370",
+      "--ns-graphite-5":  "#6B7480",
+      // The substrate ramp lives here. Mist-3 is the page background
+      // (specified). Mist-2 is panel-surface (darker so panels register
+      // against the lighter background). Mist-1 is the deepest substrate
+      // value, used for raised panels or emphasis surfaces.
+      "--ns-mist-1":      "#7C8593",
+      "--ns-mist-2":      "#8E96A2",
+      "--ns-mist-3":      "#A4ACB8",   // SUBSTRATE — page background
+      // Bone and paper are now text-on-vermillion. They render INSIDE
+      // saturated data containers.
+      "--ns-bone":        "#D8DCE2",
+      "--ns-paper":       "#E8EDE9",   // primary text inside vermillion blocks
+      // Vermillion is the IDENTITY of this colorway. Hot red rather
+      // than warm vermillion — Beacon's chromatic register is signal-
+      // aggressive rather than emission-warm. Every title tag and
+      // data container uses this hue, unifying the colorway's identity.
+      // Heritage: stop signs, warning labels, pure cinnabar pigment,
+      // aircraft HUD primary readouts. Far enough from the golden-
+      // yellow auxiliary text (FFD235) on the chromatic wheel that
+      // the two read as distinct categories at a glance.
+      "--ns-vermillion":  "#F70D1A",
+      // Amber, cyan, radiation retain their state semantics but must
+      // be saturated more heavily than in dark colorways because they
+      // sit on a LIGHT substrate where luminance contrast is reduced.
+      // Saturation is what makes them pop now, not luminance.
+      // Amber is now the GOLDEN YELLOW of Beacon's auxiliary/context
+      // text register. Distinct from the deep warm honey-amber of
+      // dark colorways — this is high-visibility school-bus yellow,
+      // chosen for categorical visibility rather than warm depth.
+      "--ns-amber":       "#FFD235",
+      "--ns-cyan":        "#0A8FA8",   // process — deeper cyan for light bg
+      "--ns-radiation":   "#2D9A40",   // alive — deeper green for light bg
+      // Eco-brutalist warmth: against a cool light substrate, warm
+      // browns need to be saturated and slightly darker to register.
+      "--ns-oak":         "#5C4830",
+      "--ns-clay":        "#A06840",
+      "--ns-botanical":   "#3F7A52"
+    }
+  }
+};
+
+// =====================================================
+// TOKEN GROUPING — for editor layout
+// =====================================================
+const TOKEN_GROUPS = {
+  substrate: [
+    "--ns-pure-void", "--ns-void",
+    "--ns-graphite-1", "--ns-graphite-2", "--ns-graphite-3",
+    "--ns-graphite-4", "--ns-graphite-5",
+    "--ns-mist-1", "--ns-mist-2", "--ns-mist-3",
+    "--ns-bone", "--ns-paper"
+  ],
+  accents: [
+    "--ns-vermillion", "--ns-amber", "--ns-cyan", "--ns-radiation"
+  ],
+  warmth: [
+    "--ns-oak", "--ns-clay", "--ns-botanical"
+  ]
+};
+
+// =====================================================
+// STATE
+// =====================================================
+let activeColorway = "aurora"; // start on Aurora as requested
+let liveTokens = { ...COLORWAYS[activeColorway].tokens };
+
+// =====================================================
+// APPLY tokens to :root
+// =====================================================
+function applyTokens(tokens) {
+  const root = document.documentElement;
+  Object.entries(tokens).forEach(([k, v]) => {
+    root.style.setProperty(k, v);
+  });
+  // Update displayed hex labels in the chip section
+  document.querySelectorAll("[data-display-of]").forEach(el => {
+    const tok = el.getAttribute("data-display-of");
+    if (tokens[tok]) el.textContent = tokens[tok].toUpperCase();
+  });
+}
+
+// =====================================================
+// BUILD switcher
+// =====================================================
+function buildSwitcher() {
+  const el = document.getElementById("switcher");
+  el.innerHTML = "";
+  Object.entries(COLORWAYS).forEach(([key, cw]) => {
+    const btn = document.createElement("button");
+    btn.className = "sb-switcher__btn" + (key === activeColorway ? " is-active" : "");
+    btn.innerHTML = `
+      <span class="lbl">${cw.name}</span>
+      <span class="desc">${cw.desc}</span>
+    `;
+    btn.addEventListener("click", () => {
+      activeColorway = key;
+      liveTokens = { ...COLORWAYS[key].tokens };
+      applyTokens(liveTokens);
+      document.body.setAttribute("data-colorway", key);
+      buildSwitcher();
+      buildEditors();
+      document.getElementById("active-name").textContent = cw.name.toUpperCase();
+      document.getElementById("footer-cw").textContent = cw.name.toUpperCase();
+    });
+    el.appendChild(btn);
+  });
+}
+
+// =====================================================
+// BUILD token editors
+// =====================================================
+function buildEditors() {
+  Object.entries(TOKEN_GROUPS).forEach(([group, tokens]) => {
+    const container = document.getElementById("tokens-" + group);
+    container.innerHTML = "";
+    tokens.forEach(tok => {
+      const value = liveTokens[tok];
+      const row = document.createElement("div");
+      row.className = "sb-token";
+      row.innerHTML = `
+        <div class="sb-token__swatch" style="background: ${value};"></div>
+        <span class="sb-token__name">${tok.replace("--ns-", "")}</span>
+        <input type="text" class="sb-token__hex" value="${value.toUpperCase()}" data-tok="${tok}">
+        <input type="color" class="sb-token__pick" value="${value}" data-tok="${tok}">
+      `;
+      container.appendChild(row);
+    });
+  });
+
+  // Bind handlers
+  document.querySelectorAll(".sb-token__hex").forEach(input => {
+    input.addEventListener("change", (e) => {
+      const tok = e.target.getAttribute("data-tok");
+      let v = e.target.value.trim();
+      if (!v.startsWith("#")) v = "#" + v;
+      if (/^#[0-9A-Fa-f]{6}$/.test(v)) {
+        liveTokens[tok] = v;
+        applyTokens(liveTokens);
+        // Update swatch and color picker without rebuilding everything
+        const row = e.target.closest(".sb-token");
+        row.querySelector(".sb-token__swatch").style.background = v;
+        row.querySelector(".sb-token__pick").value = v;
+      } else {
+        e.target.value = liveTokens[tok].toUpperCase();
+      }
+    });
+  });
+  document.querySelectorAll(".sb-token__pick").forEach(input => {
+    input.addEventListener("input", (e) => {
+      const tok = e.target.getAttribute("data-tok");
+      const v = e.target.value;
+      liveTokens[tok] = v;
+      applyTokens(liveTokens);
+      const row = e.target.closest(".sb-token");
+      row.querySelector(".sb-token__swatch").style.background = v;
+      row.querySelector(".sb-token__hex").value = v.toUpperCase();
+    });
+  });
+}
+
+// =====================================================
+// EXPORT button — dump current palette to clipboard / alert
+// =====================================================
+document.getElementById("export-btn").addEventListener("click", () => {
+  const lines = [
+    "/* " + COLORWAYS[activeColorway].name + " — exported from sandbox */",
+    ":root {"
+  ];
+  Object.entries(liveTokens).forEach(([k, v]) => {
+    lines.push("  " + k + ": " + v.toUpperCase() + ";");
+  });
+  lines.push("}");
+  const out = lines.join("\n");
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(out).then(
+      () => alert("Copied to clipboard:\n\n" + out),
+      () => alert(out)
+    );
+  } else {
+    alert(out);
+  }
+});
+
+// =====================================================
+// RESET button — reset current colorway to its definition
+// =====================================================
+document.getElementById("reset-btn").addEventListener("click", () => {
+  liveTokens = { ...COLORWAYS[activeColorway].tokens };
+  applyTokens(liveTokens);
+  buildEditors();
+});
+
+// =====================================================
+// INIT
+// =====================================================
+applyTokens(liveTokens);
+document.body.setAttribute("data-colorway", activeColorway);
+buildSwitcher();
+buildEditors();
+document.getElementById("active-name").textContent = COLORWAYS[activeColorway].name.toUpperCase();
+document.getElementById("footer-cw").textContent = COLORWAYS[activeColorway].name.toUpperCase();
+
+</script>
+
+</body>
+</html>

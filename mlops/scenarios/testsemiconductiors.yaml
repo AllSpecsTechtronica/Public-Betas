@@ -1,0 +1,24 @@
+name: testsemiconductiors
+display_name: testsemiconductiors
+description: Scenario profile for testsemiconductiors.
+backbone_type: custom_code
+dataset: ''
+ci_cd:
+  enabled: true
+  metric: map50_95
+  threshold: 0.9
+  regression_tolerance: 0.02
+  promotion: manual
+  required_artifacts:
+  - weights
+  - metrics.json
+  - dataset_snapshot
+  - repro_manifest
+base_model: ''
+classes: []
+postproc: ''
+weights: ''
+hyperparams: {}
+backbone_config:
+  cells: []
+  datasets: []

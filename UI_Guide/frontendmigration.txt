@@ -1,0 +1,60 @@
+Plan
+
+CV Ops Nice Frontend Migration Plan
+Summary
+--nice is not replacing CV Ops.
+It is a cleaner React frontend layered over the existing messy but working Python/FastAPI backend.
+--local remains the authoritative legacy workbench and fallback.
+Phase 2 should migrate the core daily operating surface together: Collect & Edit, Train & Test, Ecosystem, and Database.
+Key Changes
+Keep backend behavior intact unless React needs a small adapter endpoint.
+Use frontend API adapters to hide backend response quirks.
+Make unported or brittle workflows visible with “Open in Local Workbench.”
+Build React around the existing concepts:
+Ecosystem graph
+Database libraries
+Collect & Edit workflow
+Train/Test workflow
+Jobs/events/status
+Scenario/model/result inspection
+Migration Sequence
+Phase 1: React foundation
+Add routing, app shell, API adapters, query/cache layer, WebSocket event client, status bar, activity rail, inspector pane, and local-workbench bridge.
+Keep current /nice dashboard as the first landing page.
+Phase 2: Core operating surface
+Ecosystem: React graph view backed by /ontology/graph and /ontology/entity/...; selecting entities drives the inspector.
+Database: library list, dataset detail, inventory browsing, image/label previews, class editing, add/delete/import actions.
+Collect & Edit: scrape/import entry points, selected library workflow, dataset editor shell, bulk label/split actions, augmentation controls.
+Train & Test: scenario browser, model/version status, train/update controls, queue table, progress logs, cancel/retry, result and artifact viewer.
+Shared behavior: all four areas use the same selected-entity inspector, job/event stream, and local fallback links.
+Phase 3: Lineage and Range
+Snapshots, lineages, registry lineage, drops, forks, range subjects, golden sets, drift, evaluations, gates.
+Phase 4: Specialist panels
+Cells, Notes, Audio, 3D, Notifications, Diagnostics, Settings polish, View Port launch/status.
+Phase 5: Parity hardening
+Fill remaining feature gaps.
+Add regression tests and smoke scripts.
+Keep --local available unless explicitly retired later.
+Boundary Rules
+Do not rewrite the backend as part of this migration.
+Do not block frontend progress on perfect backend cleanup.
+Do not remove Qt panels or --local.
+Do add small backend adapter routes only when existing endpoints are too awkward or unsafe for React.
+Do clearly show when a workflow is still powered by legacy/local behavior.
+Test Plan
+npm run build
+python -m py_compile for changed Python files.
+python -m insight_local.cvops --nice --help
+python -m insight_local.cvops --local --help
+Phase 2 acceptance:
+Ecosystem graph loads and entity selection updates inspector.
+Database libraries and inventories load.
+Collect/Edit can select a library and perform at least one safe edit/import path.
+Train/Test can queue a job, show progress, cancel/retry, and show result/artifacts.
+WebSocket event stream updates all relevant views.
+Missing advanced behavior links clearly to --local.
+Assumptions
+The existing backend remains messy but functional.
+React is a usability layer, not a backend replacement.
+Phase 2 is intentionally broad because these four areas form the actual daily workflow.
+--local remains the safety valve for incomplete parity.

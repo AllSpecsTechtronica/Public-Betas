@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "scenario": "test11",
+  "cells": [
+    {
+      "id": "2fd3e48c54",
+      "name": "test1111",
+      "path": "mlops/custom_cells/test11/draft/cell_2fd3e48c54.py",
+      "entry": "run",
+      "datasets": []
+    },
+    {
+      "id": "7fb0775de1",
+      "name": "5555",
+      "path": "mlops/custom_cells/test11/draft/cell_7fb0775de1.py",
+      "entry": "run",
+      "datasets": []
+    },
+    {
+      "id": "99c16ba361",
+      "name": "cell_99c16ba361",
+      "path": "mlops/custom_cells/test11/draft/cell_99c16ba361.py",
+      "entry": "run",
+      "datasets": []
+    }
+  ],
+  "scenario_datasets": []
+}

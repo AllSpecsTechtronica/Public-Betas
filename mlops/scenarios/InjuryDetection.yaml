@@ -1,0 +1,14 @@
+name: InjuryDetection
+display_name: InjuryDetection
+description: Surface Injury Detection
+backbone_type: yolo_detection
+dataset: tiger111_subset
+base_model: assets/models/yolo26n.pt
+classes:
+- tiger
+postproc: mlops.pipeline.postproc.generic_detection:run
+weights: mlops/models/InjuryDetection/v1/weights.pt
+hyperparams:
+  epochs: 20
+  imgsz: 640
+  guard_profile: balanced

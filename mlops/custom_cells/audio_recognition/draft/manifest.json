@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "scenario": "audio_recognition",
+  "cells": [
+    {
+      "id": "c1",
+      "name": "c1",
+      "path": "mlops/custom_cells/audio_recognition/draft/cell_c1.py",
+      "entry": "run",
+      "datasets": []
+    }
+  ],
+  "scenario_datasets": []
+}

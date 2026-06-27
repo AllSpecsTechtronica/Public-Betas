@@ -1,0 +1,4 @@
+# PyQt5 modular CV app (Base_Cv_program). Uses a dedicated venv: .venv-base
+# Install: scripts/install_packages_base.sh   or   scripts\install_packages_base.ps1
+
+-r Base_Cv_program/requirements.txt

@@ -1,0 +1,34 @@
+name: archive_1_-04
+display_name: Archive (1) 04luis
+description: Scenario profile for Archive (1) 04luis.
+backbone_type: yolo_detection
+dataset: archive (1)-03
+base_model: Insight/insight_local/Insight_assets/models/yolov8n.pt
+classes:
+- Bacterial Spot
+- Early_Blight
+- Healthy
+- Late_blight
+- Leaf Mold
+- Target_Spot
+- black spot
+postproc: mlops.pipeline.postproc.generic_detection:run
+weights: mlops/models/archive_1_-04/v1/weights.pt
+hyperparams:
+  epochs: 20
+  imgsz: 640
+  quality_stop_enabled: true
+  quality_stop_metric: map50_95
+  quality_stop_threshold: 0.9
+  quality_stop_min_epochs: 5
+  quality_stop_consecutive_epochs: 2
+  quality_stop_rapid_clear_enabled: true
+  quality_stop_rapid_clear_loss_ratio: 0.35
+  quality_stop_rapid_clear_metric_margin: 0.03
+  quality_regression_enabled: true
+  quality_regression_abs_tolerance: 0.05
+  quality_regression_rel_tolerance: 0.15
+  quality_regression_consecutive_epochs: 1
+  quality_stop_attempt_mode: false
+  quality_stop_max_time_seconds: 0
+  guard_profile: balanced

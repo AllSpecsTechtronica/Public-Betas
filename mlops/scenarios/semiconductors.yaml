@@ -1,0 +1,24 @@
+name: semiconductors
+display_name: semiconductors
+description: Scenario profile for semiconductors.
+base_model: Base_Cv_program/yolo11n.pt
+dataset: SemiConductor_flaw_Detection-yolo-04
+classes:
+- Center
+- Donut
+- Edge-Loc
+- Edge-Ring
+- Local
+- Near-Full
+- Normal
+- Random
+- Scratch
+postproc: mlops.pipeline.postproc.generic_detection:run
+weights: mlops/models/semiconductors/v1/weights.pt
+hyperparams:
+  epochs: 20
+  imgsz: 640
+  guard_profile: fast
+  quality_stop_enabled: false
+  quality_stop_attempt_mode: true
+  quality_stop_min_epochs: 1

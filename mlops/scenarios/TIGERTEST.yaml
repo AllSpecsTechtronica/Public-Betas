@@ -1,0 +1,22 @@
+name: TIGERTEST
+display_name: tiger
+description: Scenario profile for tiger.
+backbone_type: yolo_detection
+dataset: archive (1)-02
+base_model: Base_Cv_program/yolo11n.pt
+classes:
+- Bacterial Spot
+- Early_Blight
+- Healthy
+- Late_blight
+- Leaf Mold
+- Target_Spot
+- black spot
+postproc: mlops.pipeline.postproc.generic_detection:run
+weights: mlops/models/TIGERTEST/v1/weights.pt
+hyperparams:
+  epochs: 20
+  imgsz: 640
+  guard_profile: balanced
+backbone_config:
+  dataset_csv: tigerDetection

@@ -1,0 +1,39 @@
+# Core Python stack for Insight desktop, CV Ops (Qt + FastAPI), and mlops.pipeline training.
+# Install: scripts/install_packages.sh   or   scripts\\install_packages.ps1
+#
+# Legacy PyQt5 Base_Cv_program uses a separate venv (.venv-base): scripts/install_packages_base.*
+#
+# PyTorch wheels: default PyPI installs work on macOS and Windows for many setups.
+# For CUDA-specific builds, install torch/torchvision from https://pytorch.org/ first, then:
+#   pip install -r requirements-cvlayer.txt --no-deps
+# and add missing packages manually if needed.
+
+PyQt6>=6.6.0
+PyQt6-WebEngine>=6.6.0
+
+opencv-python>=4.8.0
+numpy>=1.24.0
+Pillow>=10.0.0
+scipy>=1.11.0
+matplotlib>=3.7.0
+pandas>=2.0.0
+pyarrow>=14.0.0          # Parquet ingest for tabular datasets
+openpyxl>=3.1.0          # Excel (.xlsx) ingest for tabular datasets
+
+torch>=2.2.0
+torchvision>=0.17.0
+ultralytics>=8.0.0
+
+fastapi>=0.100.0
+uvicorn[standard]>=0.23.0
+python-multipart>=0.0.9
+pydantic>=2.0.0
+PyYAML>=6.0
+
+httpx>=0.27.0
+requests>=2.31.0
+psutil>=5.9.0
+keyring>=24.0.0  # OS keyring storage for cloud AI provider API keys
+vosk>=0.3.45
+
+aiortc>=1.5.0

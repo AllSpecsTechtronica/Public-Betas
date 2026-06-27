@@ -1,0 +1,18 @@
+name: audio_recognition
+display_name: audio_recognition
+description: Scenario profile for AudioFolder sound classification and recognition.
+backbone_type: audio_recognition
+dataset: AudioRecognition
+base_model: ''
+classes: []
+postproc: ''
+weights: mlops/models/audio_recognition/v1/model.json
+hyperparams: {}
+backbone_config:
+  # AudioFolder layout:
+  #   assets/ml_audio/AudioRecognition/train/<ClassName>/*.wav
+  #   assets/ml_audio/AudioRecognition/val/<ClassName>/*.wav
+  # Root-level <ClassName>/*.wav is also accepted for small local datasets.
+  # Use CV Ops /audio/collect_clip to cut, clean, and label source audio/video
+  # into this dataset before training.
+  feature_model: nearest_centroid

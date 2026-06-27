@@ -1,0 +1,70 @@
+{
+  "version": 1,
+  "scenarios": [
+    {
+      "name": "fall_detection",
+      "config": "mlops/scenarios/fall_detection.yaml",
+      "enabled": true
+    },
+    {
+      "name": "semiconductors",
+      "config": "mlops/scenarios/semiconductors.yaml",
+      "enabled": true
+    },
+    {
+      "name": "test",
+      "config": "mlops/scenarios/test.yaml",
+      "enabled": true
+    },
+    {
+      "name": "face_recog",
+      "config": "mlops/scenarios/face_recog.yaml",
+      "enabled": true
+    },
+    {
+      "name": "audio_recognition",
+      "config": "mlops/scenarios/audio_recognition.yaml",
+      "enabled": true
+    },
+    {
+      "name": "test11",
+      "config": "mlops/scenarios/test11.yaml",
+      "enabled": true
+    },
+    {
+      "name": "InjuryDetection",
+      "config": "mlops/scenarios/InjuryDetection.yaml",
+      "enabled": true
+    },
+    {
+      "name": "TIGERTEST",
+      "config": "mlops/scenarios/TIGERTEST.yaml",
+      "enabled": true
+    },
+    {
+      "name": "adass",
+      "config": "mlops/scenarios/adass.yaml",
+      "enabled": true
+    },
+    {
+      "name": "scrap_bengal_tiger",
+      "config": "mlops/scenarios/scrap_bengal_tiger.yaml",
+      "enabled": true
+    },
+    {
+      "name": "archive_1_-02",
+      "config": "mlops/scenarios/archive_1_-02.yaml",
+      "enabled": true
+    },
+    {
+      "name": "archive_1_-04",
+      "config": "mlops/scenarios/archive_1_-04.yaml",
+      "enabled": true
+    },
+    {
+      "name": "testsemiconductiors",
+      "config": "mlops/scenarios/testsemiconductiors.yaml",
+      "enabled": true
+    }
+  ]
+}

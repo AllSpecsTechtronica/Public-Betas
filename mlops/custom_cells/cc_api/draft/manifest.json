@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "scenario": "cc_api",
+  "cells": [
+    {
+      "id": "c1",
+      "name": "TrainCell",
+      "path": "mlops/custom_cells/cc_api/draft/cell_c1.py",
+      "entry": "run",
+      "datasets": [
+        {
+          "name": "blob",
+          "kind": "inline_text",
+          "path": "mlops/custom_cells/cc_api/draft/data/c1/blob.txt",
+          "format": "text",
+          "mode": "managed_copy"
+        }
+      ]
+    }
+  ],
+  "scenario_datasets": [
+    {
+      "name": "primary",
+      "kind": "database",
+      "path": "database/x",
+      "format": "yolo",
+      "mode": "reference"
+    }
+  ]
+}

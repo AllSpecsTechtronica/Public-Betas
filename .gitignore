@@ -1,0 +1,97 @@
+# Python/runtime
+.venv/
+.venv-base/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.DS_Store
+.tools/
+nerfstudio/
+
+# Local secrets. Keep examples tracked.
+.env
+.env.*
+!.env.example
+!.env.*.example
+.claude/*.local.json
+LibBinaries.py
+HighLightAnythingEngineMetaData.py
+HighLightAdminPrompt.py
+
+# Debug/session output
+debug/
+**/debug/
+context_windows/
+tmp*/
+tmph*/
+tmp_template_work.html
+*.log
+*.unscanned
+
+# Personal AI conversation data — never commit, keep the repo safe to open-source.
+# Live chat stores live under state/ (below) and solo_rag_chat/_solo_data, but these
+# explicit patterns are defense-in-depth in case a store is relocated or a raw export
+# is dropped into the tree for ingestion.
+**/_solo_data/
+**/notes/chats/
+**/notes/spaces/
+**/chats/chat_*.json
+# Transferred-knowledge memory built from ingested AI chat exports (transcripts,
+# summaries, detected memory files, the provenance ledger) plus its FAISS index.
+**/notes/ingested_memory/
+**/notes/ingested_memory_rag_index/
+# RAG vector indexes built from personal notes/chats.
+**/notes/notes_rag_index/
+**/rag_index/
+# AI provider keys (plaintext API keys live here).
+**/ai_settings.json
+# Raw exported chat histories (Claude / ChatGPT "Export data") dropped in for import.
+**/conversations.json
+**/projects.json
+**/users.json
+
+# Local app state, databases, and WAL/SHM sidecars.
+state/
+gallery/*.db
+gallery/*.db-*
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+# Local dataset library (used by CV Ops `/database` endpoints).
+database/**
+!database/README.md
+
+# CV/ML generated runs, model weights, and bulky media.
+runs/
+.gaussian_splat/
+mlops/models/
+mlops/model_registry.json
+mlops/dataset_registry/
+mlops/integration/
+mlops/jobs/
+mlops/database/
+mlops/datasets/
+Insight/assets/model_feedback/
+Insight/assets/corrections/
+assets/models/
+assets/videos/
+assets/ml_audio/
+*.pt
+*.pth
+*.onnx
+*.mlpackage/
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.wav
+*.mp3
+*.flac

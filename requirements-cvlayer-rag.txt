@@ -1,0 +1,15 @@
+# Optional: Notes / solo RAG panels in CV Ops (langchain + embeddings + PDF ingest).
+# Install after core: pip install -r requirements-cvlayer-rag.txt
+
+-r requirements-cvlayer.txt
+
+sentence-transformers>=2.2.0
+faiss-cpu>=1.7.4
+pymupdf>=1.23.0
+langchain>=0.2.0
+langchain-community>=0.2.0
+langchain-openai>=0.1.0
+langchain-core>=0.2.0
+langchain-text-splitters>=0.2.0
+langchain-ollama>=0.1.0
+langchain-huggingface>=0.0.3

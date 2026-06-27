@@ -1,0 +1,84 @@
+**A standard LLM frontend** (e.g., ChatGPT web interface, with similarities to Claude, Grok, Gemini, Perplexity, etc.) is a web-based chat application. Here is an exhaustive list of nearly everything it contains and shows, omitting zero details, based on typical 2025–2026 implementations (primarily ChatGPT as the most common "standard").
+
+### 1. Overall Layout / Structure
+- **Left Sidebar** (collapsible/hidable via button or icon; can be floating or pinned in newer designs): Primary navigation hub.
+- **Main Chat Area** (central content pane): Displays conversation, empty state (logo/prompt suggestions), messages, and streaming responses.
+- **Top Bar/Header** (above main chat): Model selector, chat title/info, sharing/export options, more menu.
+- **Bottom Input/Prompt Area**: Fixed or sticky input box that moves to bottom after chatting starts.
+- **Right Sidebar** (optional/contextual, not always present): For projects, details, canvas/workspace, or advanced tools.
+- **Mobile Adaptations**: Hamburger menu for sidebar, bottom keyboard-aligned input, simplified top nav.
+
+### 2. Left Sidebar Elements (Top to Bottom)
+- **Collapse/Expand Toggle** (e.g., three lines or arrow icon).
+- **Search Bar / Magnifying Glass Icon** for chat history.
+- **New Chat Button** (often + icon or prominent button; multiple instances).
+- **Explore GPTs / Custom GPTs / Assistants Section** (link to store/marketplace; list of saved custom GPTs).
+- **Chat History List**: Scrollable list of past conversations with titles (editable/renamable), timestamps or previews, hover options (three dots for archive, delete, share, move). Infinite scroll or folders/pinned chats in redesigned versions.
+- **Projects / Workspaces** (group related chats/files/instructions).
+- **Library / Image & File Gallery** (stored generations).
+- **Bottom User Section**: Profile icon/name, account settings, logout, personalization options.
+
+### 3. Main Chat Area (Empty State)
+- Company/LLM logo (e.g., OpenAI/ChatGPT logo, Grok/xAI branding).
+- Welcome message or tagline.
+- **Suggested Prompt Cards/Chips**: Example questions or quick-start prompts (clickable).
+- Model/version indicator.
+
+### 4. Active Conversation View
+- **Message Bubbles**:
+  - User messages (right-aligned, often with edit/regenerate options).
+  - AI responses (left-aligned, with markdown rendering, code blocks with copy/syntax highlighting, tables, lists, LaTeX, images/videos).
+  - Streaming text (appears word-by-word or token-by-token).
+  - Citations/sources (inline or footer, with links).
+  - Artifacts/Generated Content (embedded images, code canvases, tables, charts, forms, cards, carousels, etc.).
+- **Feedback Controls** per message: Thumbs up/down, copy, regenerate, edit prompt, share, report.
+- **Loading Indicators**: Spinner, typing dots, or "thinking" animation.
+- **Conversation Controls** (top of chat): Rename chat, share link, export, archive/delete, temporary chat toggle, move to project.
+
+### 5. Top Bar / Header in Chat
+- **Model Picker/Dropdown**: List of available models (e.g., GPT-5 variants, legacy, fast/instant/thinking modes) with speed/reasoning indicators and usage limits.
+- Chat title (auto-generated or editable).
+- **Share Button** (public link generation).
+- **More Menu** (⋯): Archive, delete, move, temporary chat, etc.
+- Voice mode toggle or other quick actions.
+
+### 6. Input / Prompt Bar (Bottom)
+- **Resizable Textarea**: "Ask anything" placeholder; supports multi-line, Enter to send (Shift+Enter for new line), auto-resize.
+- **Attachment / + Icon** (paperclip): Upload files (PDFs, images, spreadsheets, docs, screenshots), Google Drive/Dropbox integration, camera capture.
+- **Tools/Menu Icon** (toolbox or +): Deep Research, Agent Mode, Web Search, Create Image, Canvas, Study/Learn, Voice, etc. Activated modes show as tags/lozenges above input.
+- **Microphone / Voice Input Icon**: For speech-to-text or full Voice Mode (with screen sharing on mobile).
+- **Send Button** (arrow/paper plane; enabled only with content).
+- Additional icons in some interfaces: Globe for web search, image generation shortcut, etc.
+
+### 7. Additional Global / Footer Elements
+- **Help / Question Mark Icon**: FAQs, release notes, terms, policies, keyboard shortcuts.
+- **Disclaimer Text** (often at bottom of responses or page): About hallucinations, not infallible, etc.
+- **Keyboard Shortcuts** support (visible in help menu).
+- **Settings Panel** (via profile): Personalization (tone, memory, custom instructions), appearance (dark/light), voice settings, connected accounts (Google Drive, etc.), billing, privacy, data controls, notifications, tasks/scheduling.
+
+### 8. Advanced / Contextual Features Shown
+- **Canvas / Split Workspace**: Side-by-side editing for code/text.
+- **Embedded Rich Content**: Interactive cards, tables, forms, charts, carousels, buttons (GenUI/Generative UI).
+- **Memory / Personalization Indicators**: "Remembering..." or context from prior chats.
+- **Usage / Limit Indicators**: Message caps, quota warnings (especially for free vs. paid tiers).
+- **Temporary Chat Mode**: No history saved, no training use.
+- **Multi-Modal Indicators**: Image analysis, video, audio processing icons.
+- **Regenerate / Continue / Stop Generation** buttons during response.
+- **Error Messages** and retry options.
+- **Login / Onboarding Screens** (if not authenticated): Sign-up, limited guest mode.
+
+### 9. Other Common Visual/UI Details
+- Responsive design (desktop vs. mobile).
+- Dark/light mode (auto or manual).
+- Animations: Message appearance, streaming, loading, hover states.
+- Drag-and-drop support (for files, reordering chats).
+- Accessibility features: ARIA labels, keyboard nav, screen reader support.
+- Notifications/toasts for saves, errors, upgrades.
+- Footer links (terms, privacy) in some views.
+
+**Variations Across LLMs**:
+- **Grok/xAI**: Simpler/minimalist; emphasis on voice, image/video gen (Grok Imagine), DeepSearch toggle, less cluttered sidebar.
+- **Claude**: Artifacts pane, projects emphasis, strong code focus.
+- **Others**: Perplexity has heavy search/citations; Gemini integrates Google services deeply.
+
+This covers virtually every visible, interactive, or functional element in a comprehensive modern standard LLM chat frontend. Interfaces evolve, but these are the core constants as of 2026.

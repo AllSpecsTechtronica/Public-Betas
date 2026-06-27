@@ -1,0 +1,24 @@
+name: mono_with_trellis
+display_name: Mono + TRELLIS object
+description: Base single-image reconstruction plus optional TRELLIS enhancement for one foreground object.
+max_image_size: 768
+fov_degrees: 50.0
+depth_backend: coreml
+depth_model_path: Insight/insight_local/Insight_assets/models/DepthAnythingModelSmall
+mesh_stride: 2
+max_depth: 4.0
+floor_percentile: 85.0
+enhance_trellis: true
+stages:
+  preprocess: true
+  pose: true
+  depth: true
+  geometry: true
+  texture: true
+  walkability: true
+  enhance_trellis: true
+  export: true
+trellis_params:
+  resolution: "1024"
+  decimation_target: 300000
+  texture_size: 2048

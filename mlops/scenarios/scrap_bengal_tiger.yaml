@@ -1,0 +1,28 @@
+name: scrap_bengal_tiger
+display_name: Bengal Tiger
+description: Scrap-built scenario for topic 'bengal tiger'.
+backbone_type: yolo_detection
+dataset: scrap_bengal_tiger
+base_model: assets/models/yolov10n.pt
+classes:
+- tiger
+postproc: mlops.pipeline.postproc.generic_detection:run
+weights: mlops/models/scrap_bengal_tiger/v1/weights.pt
+hyperparams:
+  epochs: 20
+  imgsz: 640
+  quality_stop_enabled: true
+  quality_stop_metric: map50_95
+  quality_stop_threshold: 0.9
+  quality_stop_min_epochs: 5
+  quality_stop_consecutive_epochs: 2
+  quality_stop_rapid_clear_enabled: true
+  quality_stop_rapid_clear_loss_ratio: 0.35
+  quality_stop_rapid_clear_metric_margin: 0.03
+  quality_regression_enabled: true
+  quality_regression_abs_tolerance: 0.05
+  quality_regression_rel_tolerance: 0.15
+  quality_regression_consecutive_epochs: 1
+  quality_stop_attempt_mode: false
+  quality_stop_max_time_seconds: 0
+  guard_profile: balanced
